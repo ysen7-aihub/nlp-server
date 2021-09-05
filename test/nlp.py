@@ -10,13 +10,14 @@ from tqdm import tqdm, tqdm_notebook
 from kobert.utils import get_tokenizer
 from kobert.pytorch_kobert import get_pytorch_kobert_model
 
+#2.8.0
 from transformers import AdamW
 from transformers.optimization import get_cosine_schedule_with_warmup
-from transformers.models.bert.modeling_bert import BertEmbeddings
 
 import os
 
 #device = torch.device("cuda:0")
+device = torch.device("cpu")
 bertmodel, vocab = get_pytorch_kobert_model()
 
 class BERTDataset(Dataset):
@@ -73,8 +74,7 @@ class BERTClassifier(nn.Module):
             out = self.dropout(pooler)
         return self.classifier(out)
 
-#model = BERTClassifier(bertmodel,  dr_rate=0.5).to(device)
-model = BERTClassifier(bertmodel,  dr_rate=0.5)
+model = BERTClassifier(bertmodel,  dr_rate=0.5).to(device)
 
 no_decay = ['bias', 'LayerNorm.weight']
 optimizer_grouped_parameters = [
@@ -84,14 +84,12 @@ optimizer_grouped_parameters = [
 
 optimizer = AdamW(optimizer_grouped_parameters, lr=learning_rate)
 loss_fn = nn.CrossEntropyLoss()
+#os.chdir('./models/')
 
+model1 = torch.load('./models/7emotions_model.pt', map_location=device)                                       # 전체 모델을 통째로 불러옴, 클래스 선언 필수.
+model1.load_state_dict(torch.load('./models/7emotions_model_state_dict.pt', map_location=device))             # state_dict를 불러 온 후, 모델에 저장.
 
-os.chdir('./models/')
-
-model1 = torch.load('7emotions_model.pt')                                       # 전체 모델을 통째로 불러옴, 클래스 선언 필수.
-model1.load_state_dict(torch.load('7emotions_model_state_dict.pt'))             # state_dict를 불러 온 후, 모델에 저장.
-
-checkpoint = torch.load('7emotions_all.tar')                                    # dict 불러오기.
+checkpoint = torch.load('./models/7emotions_all.tar', map_location=device)                                    # dict 불러오기.
 model1.load_state_dict(checkpoint['model'])
 optimizer.load_state_dict(checkpoint['optimizer'])
 
@@ -109,20 +107,18 @@ def predict(predict_sentence):                                                  
     dataset_another = [data]
 
     another_test = BERTDataset(dataset_another, 0, 1, tok, max_len, True, False)
-    test_dataloader = torch.utils.data.DataLoader(another_test, batch_size=batch_size, num_workers=5)
+    #test_dataloader = torch.utils.data.DataLoader(another_test, batch_size=batch_size, num_workers=5)
+    test_dataloader = torch.utils.data.DataLoader(another_test, batch_size=batch_size, num_workers=0)
     
     model1.eval()
 
     for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(test_dataloader):
-        #token_ids = token_ids.long().to(device)
-        token_ids = token_ids.long()
+        token_ids = token_ids.long().to(device)
 
-        #segment_ids = segment_ids.long().to(device)
-        segment_ids = segment_ids.long()
+        segment_ids = segment_ids.long().to(device)
 
         valid_length= valid_length
-        #label = label.long().to(device)
-        label = label.long()
+        label = label.long().to(device)
 
         out = model1(token_ids, valid_length, segment_ids)
 
