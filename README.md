@@ -33,4 +33,32 @@
 ![image](https://user-images.githubusercontent.com/76643037/132103604-0b8dd52e-6a3f-4e4a-ad18-5854c91ae737.png)
 
 ### 5.
-- 한 번씩만 해주세요. 부탁드립니다ㅠㅠ
+- 이후 rustc를 설치
+
+### 6.
+같은 에러 참고 사이트
+https://github.com/pydata/bottleneck/issues/281
+
+### 7. 
+0906 현재상태
+- nlp.py를 실행시키기 위해서는, transformers==3.0.2를 설치해야 하는 것으로 생각중.
+
+- rustc (nightly version)을 설치한 상태
+  ##### 1. transformers 2점대 버전 또는 4점대 버전 설치했을 경우
+  - 이것을 설치하기 전에는 모든 버전의 transformers가 설치되지 않았지만, 설치 이후 3점대 버전을 제외한 모든 버전은 일단 설치가 됨
+  - 하지만, nlp.py를 실행하면 다음과 같은 에러발생
+  ![image](https://user-images.githubusercontent.com/76643037/132164930-0ffea7f4-f61f-4e6e-9503-6f7defb97876.png)
+  - BertEncoder has no attributes 'output_hidden_states'
+
+  ##### 2. transformers 3점대 버전을 설치했을 경우
+  - ERROR: Could not build wheels for tokenizers which use PEP 517 and cannot be installed directly
+  ![image](https://user-images.githubusercontent.com/76643037/132165115-f550912a-ee91-4413-bfe1-8d5db33d1423.png)
+
+  ##### 3. PEP 517 error
+   - python 버전의 문제인가 싶어, 3.7과 3.9에서 모두 시도했지만 실패
+  
+### 8.
+- 현재 개발환경은 Windows
+- 이후 서버를 생성하고 Ubuntu 환경에서 실행시켜야함
+  - windows에서 성공하고 모든 requirements를 그대로 하면 ubuntu에서도 성공할까?
+  - rustc 설치같은 경우는 requirements.txt에 어떻게 적어두어야 할까? (windows같은 경우 터미널에서 설치한 것이 아니고 인터넷에 접속 후 설치)
