@@ -45,7 +45,7 @@ https://github.com/pydata/bottleneck/issues/281
 
 - rustc (nightly version)을 설치한 상태
   ##### 1. transformers 2점대 버전 또는 4점대 버전 설치했을 경우
-  - 이것을 설치하기 전에는 모든 버전의 transformers가 설치되지 않았지만, 설치 이후 3점대 버전을 제외한 모든 버전은 일단 설치가 됨
+  - rustc 설치하기 전에는 모든 버전의 transformers가 설치되지 않았지만, 설치 이후 3점대 버전을 제외한 모든 버전은 일단 설치가 됨
   - 하지만, nlp.py를 실행하면 다음과 같은 에러발생
   ![image](https://user-images.githubusercontent.com/76643037/132164930-0ffea7f4-f61f-4e6e-9503-6f7defb97876.png)
   - BertEncoder has no attributes 'output_hidden_states'
