@@ -1,4 +1,17 @@
-## library install errors
+## NLP SERVER
+
+```
+test
+∟ models
+  ∟ 7emotions_model.pt
+  ∟ 7emotions_model_state_dict.pt
+  ∟ 7emotions_all.tar
+∟ app.py
+```
+
+
+
+### library install errors
 
 #### [목표는 nlp.py 파일이 실행되게 하는 것입니다.]
 
